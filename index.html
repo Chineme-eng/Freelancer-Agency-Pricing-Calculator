@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Freelance & Agency Pricing Calculator</title>
+  <title>Freelance Pricing Calculator</title>
   <link href="https://fonts.googleapis.com/css2?family=Georgia&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
     :root {
       --bg:       #faf7f2;
@@ -30,7 +30,6 @@
       --amber-bg: #fef6e4;
       --serif:    'EB Garamond', Georgia, serif;
       --mono:     'IBM Plex Mono', monospace;
-      --sans:     Georgia, serif;
       --r:        8px;
       --r2:       12px;
       --shadow:   0 1px 4px rgba(26,22,18,0.07);
@@ -124,10 +123,7 @@
       transition: all .15s;
     }
 
-    .theme-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .wrap {
       max-width: 1100px;
@@ -167,7 +163,7 @@
       font-size: 17px;
       color: var(--muted);
       line-height: 1.6;
-      max-width: 580px;
+      max-width: 620px;
       margin: 0 auto 2rem;
     }
 
@@ -219,7 +215,7 @@
       font-weight: 500;
       color: var(--text);
       padding: 8px 12px;
-      width: 150px;
+      width: 160px;
       text-align: right;
     }
 
@@ -257,10 +253,8 @@
       margin-bottom: 3rem;
     }
 
-    @media (max-width: 900px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
+    @media(max-width:900px){
+      .main-grid { grid-template-columns: 1fr; }
     }
 
     .panel {
@@ -290,16 +284,63 @@
       color: var(--muted);
     }
 
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+    }
+
+    .service-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px;
+      cursor: pointer;
+      transition: all .15s;
+      position: relative;
+    }
+
+    .service-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    .service-card.active {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+      box-shadow: var(--shadow2);
+    }
+
+    .sc-icon {
+      font-size: 18px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .sc-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .sc-desc {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      line-height: 1.4;
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
 
-    @media (max-width: 640px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
+    @media(max-width:640px){
+      .form-grid { grid-template-columns: 1fr; }
     }
 
     .field {
@@ -327,13 +368,15 @@
       font-size: 15px;
       color: var(--text);
       outline: none;
-      transition: border-color .15s, background .15s;
+      transition: border-color .15s;
     }
 
     .input:focus,
     .select:focus {
       border-color: var(--accent);
     }
+
+    .mono { font-family: var(--mono); }
 
     .inline-money {
       display: flex;
@@ -363,36 +406,7 @@
       width: 100%;
     }
 
-    .service-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-
-    .service-btn {
-      padding: 7px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border2);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: .04em;
-      cursor: pointer;
-      background: transparent;
-      color: var(--muted);
-      transition: all .15s;
-    }
-
-    .service-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .service-btn.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
+    .results { display: flex; flex-direction: column; gap: 14px; }
 
     .big-price {
       background: var(--surface);
@@ -442,7 +456,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 14px;
     }
 
     .stat {
@@ -475,69 +488,65 @@
       margin-top: 2px;
     }
 
-    .price-ladder {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .ladder-row {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 12px;
-      align-items: center;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .ladder-name {
-      font-family: var(--serif);
-      font-size: 15px;
-    }
-
-    .ladder-price {
-      font-family: var(--mono);
-      font-size: 16px;
-      text-align: right;
-      color: var(--text);
-    }
-
-    .verdict {
+    .warning-box,
+    .info-box {
       border-radius: var(--r);
       padding: 14px 16px;
       font-family: var(--mono);
       font-size: 12px;
       line-height: 1.8;
       border-left: 3px solid;
-      margin-top: 14px;
     }
 
-    .verdict.great {
-      background: var(--green-bg);
-      border-color: var(--green);
-      color: var(--green);
-    }
-
-    .verdict.ok {
-      background: var(--amber-bg);
-      border-color: var(--amber);
-      color: var(--amber);
-    }
-
-    .verdict.bad {
+    .warning-box {
       background: var(--red-bg);
       border-color: var(--red);
       color: var(--red);
     }
 
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 3rem 0;
+    .info-box {
+      background: var(--green-bg);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .package-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .package-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .package-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .package-name {
+      font-family: var(--serif);
+      font-size: 18px;
+    }
+
+    .package-price {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    .package-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
     }
 
     .table-card {
@@ -577,7 +586,11 @@
       font-size: 14px;
     }
 
-    .mono { font-family: var(--mono); }
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 3rem 0;
+    }
 
     .tips-grid {
       display: grid;
@@ -611,6 +624,7 @@
     .tip-body {
       font-size: 13px;
       color: var(--muted);
+      font-family: var(--serif);
       line-height: 1.6;
     }
 
@@ -626,21 +640,18 @@
       line-height: 2;
     }
 
-    footer a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer a:hover { text-decoration: underline; }
+    .accent { color: var(--accent); }
+    .green { color: var(--green); }
+    .amber { color: var(--amber); }
+    .red { color: var(--red); }
   </style>
 </head>
 <body>
-
   <nav>
     <a class="nav-brand" href="#" onclick="return false;"><span>Kat</span>Tools</a>
     <div class="nav-right">
       <a class="nav-link" href="#calculator">Calculator</a>
-      <a class="nav-link" href="#breakdown">Breakdown</a>
+      <a class="nav-link" href="#packages">Packages</a>
       <a class="nav-link" href="#tips">Tips</a>
       <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">Dark mode</button>
     </div>
@@ -648,39 +659,39 @@
 
   <div class="wrap">
     <header class="hero">
-      <div class="hero-eyebrow">Stop undercharging</div>
-      <h1>The Freelance & Agency<br><em>Pricing</em> Calculator</h1>
+      <div class="hero-eyebrow">Freelancers only</div>
+      <h1>The Freelance<br><em>Pricing</em> Calculator</h1>
       <p class="hero-sub">
-        Figure out what you should actually charge based on your income goal, hours, workload, overhead, and positioning.
-        Built for freelancers, consultants, studios, and small agencies.
+        Stop guessing what to charge. Pick your freelance service, enter your goals,
+        and get clear hourly, project, and package pricing that actually makes sense.
       </p>
       <div class="hero-bar">
-        <span class="hero-bar-label">Target monthly income</span>
+        <span class="hero-bar-label">Monthly income goal</span>
         <div class="money-input-wrap">
           <span class="money-prefix">$</span>
-          <input id="incomeGoalTop" class="money-input" type="text" value="8,000" oninput="syncIncomeGoal(this)" onblur="formatMoneyInput(this)" />
+          <input id="incomeGoalTop" class="money-input" type="text" value="6,000" oninput="syncIncomeGoal(this)" onblur="formatMoneyInput(this)">
         </div>
       </div>
     </header>
 
     <section id="calculator">
       <div class="section-head">
-        <span class="section-title">Build your pricing model</span>
-        <span class="section-sub">freelancers · consultants · agencies</span>
+        <span class="section-title">Choose your freelance service</span>
+        <span class="section-sub">one person · one skill · one clear price</span>
       </div>
 
       <div class="main-grid">
         <div>
           <div class="panel">
             <div class="panel-hdr">
-              <span class="panel-label">Service type</span>
+              <span class="panel-label">Freelance services</span>
             </div>
-            <div class="service-tabs" id="serviceTabs"></div>
+            <div class="service-grid" id="serviceGrid"></div>
           </div>
 
           <div class="panel">
             <div class="panel-hdr">
-              <span class="panel-label">Your numbers</span>
+              <span class="panel-label">Your setup</span>
             </div>
 
             <div class="form-grid">
@@ -688,75 +699,64 @@
                 <label for="incomeGoal">Monthly income goal</label>
                 <div class="inline-money">
                   <span>$</span>
-                  <input id="incomeGoal" type="text" value="8,000" oninput="syncIncomeGoal(this)" onblur="formatMoneyInput(this)">
+                  <input id="incomeGoal" type="text" value="6,000" oninput="syncIncomeGoal(this)" onblur="formatMoneyInput(this)">
                 </div>
               </div>
 
               <div class="field">
-                <label for="monthlyOverhead">Monthly business overhead</label>
+                <label for="monthlyExpenses">Monthly business expenses</label>
                 <div class="inline-money">
                   <span>$</span>
-                  <input id="monthlyOverhead" type="text" value="500" oninput="update()" onblur="formatMoneyInput(this)">
+                  <input id="monthlyExpenses" type="text" value="300" oninput="update()" onblur="formatMoneyInput(this)">
                 </div>
               </div>
 
               <div class="field">
-                <label for="billableHoursWeek">Billable hours per week</label>
-                <input id="billableHoursWeek" class="input mono" type="number" value="20" min="1" oninput="update()">
+                <label for="billableHours">Billable hours per week</label>
+                <input id="billableHours" class="input mono" type="number" min="1" value="20" oninput="update()">
               </div>
 
               <div class="field">
-                <label for="workingWeeks">Working weeks per month</label>
-                <input id="workingWeeks" class="input mono" type="number" value="4" min="1" max="5" oninput="update()">
-              </div>
-
-              <div class="field">
-                <label for="taxRate">Tax / buffer %</label>
-                <input id="taxRate" class="input mono" type="number" value="25" min="0" max="80" oninput="update()">
-              </div>
-
-              <div class="field">
-                <label for="profitBuffer">Extra profit margin %</label>
-                <input id="profitBuffer" class="input mono" type="number" value="15" min="0" max="100" oninput="update()">
+                <label for="weeksPerMonth">Working weeks per month</label>
+                <input id="weeksPerMonth" class="input mono" type="number" min="1" max="5" value="4" oninput="update()">
               </div>
 
               <div class="field">
                 <label for="experience">Experience level</label>
                 <select id="experience" class="select" onchange="update()">
-                  <option value="0.85">Beginner</option>
+                  <option value="0.9">Beginner</option>
                   <option value="1" selected>Intermediate</option>
                   <option value="1.2">Advanced</option>
-                  <option value="1.45">Expert</option>
+                  <option value="1.4">Expert</option>
                 </select>
               </div>
 
               <div class="field">
-                <label for="market">Client market</label>
-                <select id="market" class="select" onchange="update()">
-                  <option value="0.9">Low budget</option>
-                  <option value="1" selected>Standard</option>
-                  <option value="1.2">Premium</option>
-                  <option value="1.45">Luxury / enterprise</option>
+                <label for="clientType">Client budget level</label>
+                <select id="clientType" class="select" onchange="update()">
+                  <option value="0.9">Low budget clients</option>
+                  <option value="1" selected>Standard clients</option>
+                  <option value="1.2">Premium clients</option>
+                  <option value="1.4">High-end / luxury clients</option>
                 </select>
               </div>
 
               <div class="field">
-                <label for="monthlyClients">Target clients per month</label>
-                <input id="monthlyClients" class="input mono" type="number" value="4" min="1" oninput="update()">
+                <label for="taxBuffer">Tax + safety buffer %</label>
+                <input id="taxBuffer" class="input mono" type="number" min="0" max="80" value="25" oninput="update()">
               </div>
 
               <div class="field">
-                <label for="hoursPerProject">Avg hours per project</label>
-                <input id="hoursPerProject" class="input mono" type="number" value="12" min="1" oninput="update()">
+                <label for="hoursPerProject">Hours per project</label>
+                <input id="hoursPerProject" class="input mono" type="number" min="1" value="10" oninput="update()">
               </div>
             </div>
           </div>
 
-          <div class="panel" id="breakdown">
+          <div class="panel">
             <div class="panel-hdr">
               <span class="panel-label">Pricing breakdown</span>
             </div>
-
             <div class="table-card" style="box-shadow:none;border:none;background:transparent;">
               <table class="pricing-table">
                 <thead>
@@ -771,61 +771,72 @@
           </div>
         </div>
 
-        <div>
+        <div class="results">
           <div class="big-price">
-            <div class="bp-label">Recommended headline price</div>
+            <div class="bp-label">Recommended project price</div>
             <div class="bp-val" id="headlinePrice">$0</div>
             <div class="bp-sub" id="headlineSub"></div>
           </div>
 
           <div class="stat-grid" id="statGrid"></div>
 
-          <div class="price-ladder" id="priceLadder"></div>
+          <div id="underchargeBox"></div>
 
-          <div id="verdictEl"></div>
+          <div id="positionBox"></div>
         </div>
       </div>
     </section>
 
     <div class="divider"></div>
 
+    <section id="packages">
+      <div class="section-head">
+        <span class="section-title">Suggested package pricing</span>
+        <span class="section-sub">easy to turn into a proposal</span>
+      </div>
+
+      <div class="package-grid" id="packageGrid"></div>
+    </section>
+
+    <div class="divider"></div>
+
     <section id="tips">
       <div class="section-head">
-        <span class="section-title">How to charge without scaring clients away</span>
+        <span class="section-title">Freelance pricing reminders</span>
       </div>
 
       <div class="tips-grid">
         <div class="tip-card">
           <div class="tip-num">01</div>
-          <div class="tip-title">Never price from desperation</div>
-          <div class="tip-body">Your rate should come from your income target, capacity, and business costs — not random emotion in a DM.</div>
+          <div class="tip-title">Do not charge from fear</div>
+          <div class="tip-body">Clients do not know your internal panic. Your pricing should come from your math, not your emotions.</div>
         </div>
         <div class="tip-card">
           <div class="tip-num">02</div>
-          <div class="tip-title">Hourly is your floor, not always your offer</div>
-          <div class="tip-body">Use the calculator to find your true hourly minimum, then package work as project pricing for better upside.</div>
+          <div class="tip-title">Hourly is your floor</div>
+          <div class="tip-body">Use your hourly number to protect yourself, but sell projects and packages whenever possible.</div>
         </div>
         <div class="tip-card">
           <div class="tip-num">03</div>
-          <div class="tip-title">Premium clients buy confidence</div>
-          <div class="tip-body">Higher prices feel more justified when your scope is clear, your process is smooth, and your positioning looks mature.</div>
+          <div class="tip-title">Packages feel more premium</div>
+          <div class="tip-body">A clear starter, standard, and premium offer makes you look more established and easier to buy from.</div>
         </div>
         <div class="tip-card">
           <div class="tip-num">04</div>
-          <div class="tip-title">Retainers smooth your income</div>
-          <div class="tip-body">One-off projects can work, but monthly retainers make your business more stable and easier to scale.</div>
+          <div class="tip-title">Cheap clients are expensive</div>
+          <div class="tip-body">Low-paying clients usually ask for more revisions, more energy, and more emotional labor.</div>
         </div>
       </div>
     </section>
 
     <footer>
-      <div>Freelance & Agency Pricing Calculator · Built for pricing clarity, not guesswork.</div>
-      <div style="margin-top:.5rem">Brand style adapted from your Profit Calculator aesthetic.</div>
+      <div>Freelance Pricing Calculator · Built for clarity, confidence, and getting paid properly.</div>
+      <div style="margin-top:.5rem">Same visual brand as your Profit Calculator.</div>
     </footer>
   </div>
 
   <script>
-    function toggleTheme() {
+    function toggleTheme(){
       const html = document.documentElement;
       const dark = html.dataset.theme !== 'dark';
       html.dataset.theme = dark ? 'dark' : 'light';
@@ -833,138 +844,206 @@
       localStorage.setItem('kc-theme', html.dataset.theme);
     }
 
-    (function () {
+    (function(){
       const saved = localStorage.getItem('kc-theme');
-      if (saved) {
+      if(saved){
         document.documentElement.dataset.theme = saved;
         document.addEventListener('DOMContentLoaded', () => {
           const btn = document.getElementById('themeBtn');
-          if (btn) btn.textContent = saved === 'dark' ? 'Light mode' : 'Dark mode';
+          if(btn) btn.textContent = saved === 'dark' ? 'Light mode' : 'Dark mode';
         });
       }
     })();
 
     const SERVICES = [
-      { id: 'freelance', label: 'Freelancer', hourlyBoost: 1, projectBoost: 1, retainerBoost: 1 },
-      { id: 'design', label: 'Design', hourlyBoost: 1.05, projectBoost: 1.08, retainerBoost: 1.05 },
-      { id: 'development', label: 'Development', hourlyBoost: 1.15, projectBoost: 1.18, retainerBoost: 1.12 },
-      { id: 'copywriting', label: 'Copywriting', hourlyBoost: 0.95, projectBoost: 1.02, retainerBoost: 1.03 },
-      { id: 'editing', label: 'Video Editing', hourlyBoost: 1.0, projectBoost: 1.06, retainerBoost: 1.04 },
-      { id: 'agency', label: 'Agency', hourlyBoost: 1.2, projectBoost: 1.25, retainerBoost: 1.22 },
-      { id: 'consulting', label: 'Consulting', hourlyBoost: 1.28, projectBoost: 1.3, retainerBoost: 1.25 }
+      {
+        id: 'graphic-design',
+        icon: '🎨',
+        name: 'Graphic Design',
+        desc: 'Flyers, branding, social posts',
+        multiplier: 1.00,
+        starter: 'Simple deliverable, fast turnaround',
+        standard: 'Better polish and strategy',
+        premium: 'Premium branding or full design scope'
+      },
+      {
+        id: 'web-design',
+        icon: '🖥️',
+        name: 'Web Design',
+        desc: 'Landing pages, UI, websites',
+        multiplier: 1.20,
+        starter: 'Small page or basic concept',
+        standard: 'Full polished client-ready design',
+        premium: 'High-end custom design system'
+      },
+      {
+        id: 'web-development',
+        icon: '💻',
+        name: 'Web Development',
+        desc: 'Sites, features, front-end builds',
+        multiplier: 1.30,
+        starter: 'Simple build or edit',
+        standard: 'Full client-facing implementation',
+        premium: 'Advanced custom coded work'
+      },
+      {
+        id: 'video-editing',
+        icon: '🎬',
+        name: 'Video Editing',
+        desc: 'Short-form, YouTube, ads',
+        multiplier: 1.10,
+        starter: 'Simple edited deliverable',
+        standard: 'Stronger pacing, polish, captions',
+        premium: 'High-conversion or branded edit package'
+      },
+      {
+        id: 'copywriting',
+        icon: '✍️',
+        name: 'Copywriting',
+        desc: 'Captions, emails, sales copy',
+        multiplier: 1.05,
+        starter: 'Basic copy asset',
+        standard: 'Sharper conversion-focused writing',
+        premium: 'Strategic copy package with revisions'
+      },
+      {
+        id: 'social-media',
+        icon: '📱',
+        name: 'Social Media',
+        desc: 'Content planning and posting',
+        multiplier: 1.00,
+        starter: 'Light monthly support',
+        standard: 'Consistent content management',
+        premium: 'Growth-focused premium support'
+      },
+      {
+        id: 'ugc-script',
+        icon: '🧠',
+        name: 'UGC / Script Writing',
+        desc: 'Hooks, scripts, creator copy',
+        multiplier: 1.00,
+        starter: 'Short script package',
+        standard: 'Better volume + better structure',
+        premium: 'Conversion-led premium scripting'
+      },
+      {
+        id: 'consulting',
+        icon: '🎯',
+        name: 'Consulting',
+        desc: 'Advice, calls, strategy',
+        multiplier: 1.35,
+        starter: 'Quick focused help',
+        standard: 'Structured expert guidance',
+        premium: 'High-level strategic support'
+      }
     ];
 
-    let activeService = 'freelance';
+    let activeService = SERVICES[0];
 
-    function formatNumber(n) {
-      return Math.round(n).toLocaleString();
+    function renderServices(){
+      const grid = document.getElementById('serviceGrid');
+      grid.innerHTML = SERVICES.map(s => `
+        <div class="service-card${s.id === activeService.id ? ' active' : ''}" onclick="pickService('${s.id}')">
+          <span class="sc-icon">${s.icon}</span>
+          <div class="sc-name">${s.name}</div>
+          <div class="sc-desc">${s.desc}</div>
+        </div>
+      `).join('');
     }
 
-    function fmtMoney(n) {
-      return '$' + Math.round(n).toLocaleString();
+    function pickService(id){
+      activeService = SERVICES.find(s => s.id === id) || SERVICES[0];
+      renderServices();
+      update();
     }
 
-    function fmtPct(n) {
-      return (Math.round(n * 10) / 10) + '%';
+    function parseMoney(str){
+      return parseInt(String(str).replace(/[^0-9]/g,'')) || 0;
     }
 
-    function parseMoney(str) {
-      return parseInt(String(str).replace(/[^0-9]/g, '')) || 0;
-    }
-
-    function formatMoneyInput(el) {
+    function formatMoneyInput(el){
       const n = parseMoney(el.value);
       el.value = n.toLocaleString();
     }
 
-    function syncIncomeGoal(el) {
+    function fmtMoney(n){
+      return '$' + Math.round(n).toLocaleString();
+    }
+
+    function fmtPct(n){
+      return (Math.round(n * 10) / 10) + '%';
+    }
+
+    function syncIncomeGoal(el){
       const n = parseMoney(el.value);
       document.getElementById('incomeGoal').value = n.toLocaleString();
       document.getElementById('incomeGoalTop').value = n.toLocaleString();
       update();
     }
 
-    function renderServiceTabs() {
-      const wrap = document.getElementById('serviceTabs');
-      wrap.innerHTML = SERVICES.map(s => `
-        <button class="service-btn${s.id === activeService ? ' active' : ''}" onclick="setService('${s.id}')">${s.label}</button>
-      `).join('');
-    }
-
-    function setService(id) {
-      activeService = id;
-      renderServiceTabs();
-      update();
-    }
-
-    function getService() {
-      return SERVICES.find(s => s.id === activeService) || SERVICES[0];
-    }
-
-    function update() {
-      const service = getService();
-
+    function update(){
       const incomeGoal = parseMoney(document.getElementById('incomeGoal').value);
-      const overhead = parseMoney(document.getElementById('monthlyOverhead').value);
-      const billableHoursWeek = +document.getElementById('billableHoursWeek').value || 1;
-      const workingWeeks = +document.getElementById('workingWeeks').value || 4;
-      const taxRate = (+document.getElementById('taxRate').value || 0) / 100;
-      const profitBuffer = (+document.getElementById('profitBuffer').value || 0) / 100;
-      const experienceMult = +document.getElementById('experience').value || 1;
-      const marketMult = +document.getElementById('market').value || 1;
-      const monthlyClients = +document.getElementById('monthlyClients').value || 1;
+      const monthlyExpenses = parseMoney(document.getElementById('monthlyExpenses').value);
+      const billableHours = +document.getElementById('billableHours').value || 1;
+      const weeksPerMonth = +document.getElementById('weeksPerMonth').value || 4;
+      const experience = +document.getElementById('experience').value || 1;
+      const clientType = +document.getElementById('clientType').value || 1;
+      const taxBuffer = (+document.getElementById('taxBuffer').value || 0) / 100;
       const hoursPerProject = +document.getElementById('hoursPerProject').value || 1;
 
-      const monthlyBillableHours = billableHoursWeek * workingWeeks;
-      const baseNeeded = incomeGoal + overhead;
-      const withTax = baseNeeded / Math.max(0.05, (1 - taxRate));
-      const withProfit = withTax * (1 + profitBuffer);
-      const adjustedTarget = withProfit * experienceMult * marketMult;
+      const monthlyHours = billableHours * weeksPerMonth;
+      const baseNeed = incomeGoal + monthlyExpenses;
+      const protectedRevenue = baseNeed / Math.max(0.1, 1 - taxBuffer);
+      const positionedRevenue = protectedRevenue * experience * clientType * activeService.multiplier;
 
-      const floorHourly = adjustedTarget / Math.max(1, monthlyBillableHours);
-      const recommendedHourly = floorHourly * service.hourlyBoost;
+      const minimumHourly = baseNeed / Math.max(1, monthlyHours);
+      const sustainableHourly = protectedRevenue / Math.max(1, monthlyHours);
+      const recommendedHourly = positionedRevenue / Math.max(1, monthlyHours);
 
-      const baseProject = recommendedHourly * hoursPerProject;
-      const recommendedProject = baseProject * service.projectBoost;
-      const premiumProject = recommendedProject * 1.25;
+      const minimumProject = minimumHourly * hoursPerProject;
+      const recommendedProject = recommendedHourly * hoursPerProject;
+      const premiumProject = recommendedProject * 1.3;
 
-      const monthlyCapacityProjects = Math.max(1, Math.floor(monthlyBillableHours / Math.max(1, hoursPerProject)));
-      const suggestedRetainer = (adjustedTarget / Math.max(1, monthlyClients)) * service.retainerBoost;
-      const dayRate = recommendedHourly * 6;
+      const starterPackage = recommendedProject * 0.85;
+      const standardPackage = recommendedProject * 1.00;
+      const premiumPackage = premiumProject * 1.35;
 
-      const projectedAtCurrentClients = recommendedProject * monthlyClients;
-      const effectiveMarginBuffer = ((adjustedTarget - baseNeeded) / Math.max(1, adjustedTarget)) * 100;
+      const underchargePercent = recommendedHourly > 0
+        ? ((recommendedHourly - minimumHourly) / recommendedHourly) * 100
+        : 0;
 
       document.getElementById('headlinePrice').textContent = fmtMoney(recommendedProject);
       document.getElementById('headlineSub').innerHTML = `
-        ${service.label} pricing · <span style="color:var(--accent)">${fmtMoney(recommendedHourly)}/hr</span>
-        &nbsp;·&nbsp; <span>${fmtMoney(suggestedRetainer)}/mo retainer</span>
+        ${activeService.name} ·
+        <span class="accent">${fmtMoney(recommendedHourly)}/hr</span>
+        &nbsp;·&nbsp;
+        <span>${hoursPerProject} hour project</span>
       `;
 
       document.getElementById('statGrid').innerHTML = [
         {
-          l: 'Hourly floor',
-          v: fmtMoney(floorHourly),
-          s: 'minimum sustainable rate',
-          c: 'var(--amber)'
+          l:'Minimum hourly',
+          v:fmtMoney(minimumHourly),
+          s:'absolute floor',
+          c:'var(--amber)'
         },
         {
-          l: 'Recommended hourly',
-          v: fmtMoney(recommendedHourly),
-          s: 'adjusted for positioning',
-          c: 'var(--accent)'
+          l:'Recommended hourly',
+          v:fmtMoney(recommendedHourly),
+          s:'better client-facing rate',
+          c:'var(--accent)'
         },
         {
-          l: 'Monthly target billed',
-          v: fmtMoney(adjustedTarget),
-          s: 'revenue needed',
-          c: 'var(--green)'
+          l:'Protected monthly target',
+          v:fmtMoney(positionedRevenue),
+          s:'goal + costs + buffer',
+          c:'var(--green)'
         },
         {
-          l: 'Capacity',
-          v: monthlyCapacityProjects + ' projects',
-          s: 'per month at current scope',
-          c: 'var(--text)'
+          l:'Recommended project',
+          v:fmtMoney(recommendedProject),
+          s:'based on your current inputs',
+          c:'var(--text)'
         }
       ].map(s => `
         <div class="stat">
@@ -974,31 +1053,18 @@
         </div>
       `).join('');
 
-      document.getElementById('priceLadder').innerHTML = [
-        { name: 'Minimum project price', price: baseProject },
-        { name: 'Recommended project price', price: recommendedProject },
-        { name: 'Premium project price', price: premiumProject },
-        { name: 'Suggested day rate', price: dayRate },
-        { name: 'Suggested monthly retainer', price: suggestedRetainer }
-      ].map(item => `
-        <div class="ladder-row">
-          <div class="ladder-name">${item.name}</div>
-          <div class="ladder-price">${fmtMoney(item.price)}</div>
-        </div>
-      `).join('');
-
       document.getElementById('breakdownRows').innerHTML = [
+        ['Freelance service', activeService.name],
         ['Monthly income goal', fmtMoney(incomeGoal)],
-        ['Monthly overhead', fmtMoney(overhead)],
-        ['Base monthly need', fmtMoney(baseNeeded)],
-        ['After tax / buffer protection', fmtMoney(withTax)],
-        ['With extra profit margin', fmtMoney(withProfit)],
-        ['Experience + market adjusted target', fmtMoney(adjustedTarget)],
-        ['Billable hours / month', formatNumber(monthlyBillableHours) + ' hrs'],
-        ['Hours per project', formatNumber(hoursPerProject) + ' hrs'],
-        ['Target clients / month', formatNumber(monthlyClients)],
-        ['Projected revenue at recommended project rate', fmtMoney(projectedAtCurrentClients)],
-        ['Protection / pricing cushion', fmtPct(effectiveMarginBuffer)]
+        ['Monthly business expenses', fmtMoney(monthlyExpenses)],
+        ['Base monthly need', fmtMoney(baseNeed)],
+        ['Tax + safety buffer', fmtPct(taxBuffer * 100)],
+        ['Working hours per month', monthlyHours + ' hrs'],
+        ['Minimum hourly floor', fmtMoney(minimumHourly)],
+        ['Sustainable hourly', fmtMoney(sustainableHourly)],
+        ['Recommended hourly', fmtMoney(recommendedHourly)],
+        ['Project hours used', hoursPerProject + ' hrs'],
+        ['Recommended project price', fmtMoney(recommendedProject)]
       ].map(row => `
         <tr>
           <td>${row[0]}</td>
@@ -1006,28 +1072,76 @@
         </tr>
       `).join('');
 
-      let verdictClass = 'ok';
-      let verdictText = '';
+      document.getElementById('packageGrid').innerHTML = `
+        <div class="package-card">
+          <div class="package-top">
+            <div class="package-name">Starter</div>
+            <div class="package-price">${fmtMoney(starterPackage)}</div>
+          </div>
+          <div class="package-desc">${activeService.starter}</div>
+        </div>
 
-      if (recommendedHourly < 35) {
-        verdictClass = 'bad';
-        verdictText = `Your current setup is pricing you low. Either raise your rates, reduce your income goal mismatch, or increase your positioning so you stop undercharging.`;
-      } else if (recommendedHourly >= 35 && recommendedHourly < 85) {
-        verdictClass = 'ok';
-        verdictText = `This is a solid working rate. You’re in a realistic market range, but your presentation and package structure will matter a lot for clients to say yes.`;
-      } else {
-        verdictClass = 'great';
-        verdictText = `You’re in premium territory. At this level, clients should feel like they are buying expertise, speed, clarity, and confidence — not just hours.`;
-      }
+        <div class="package-card">
+          <div class="package-top">
+            <div class="package-name">Standard</div>
+            <div class="package-price">${fmtMoney(standardPackage)}</div>
+          </div>
+          <div class="package-desc">${activeService.standard}</div>
+        </div>
 
-      document.getElementById('verdictEl').innerHTML = `
-        <div class="verdict ${verdictClass}">
-          ${verdictText}
+        <div class="package-card">
+          <div class="package-top">
+            <div class="package-name">Premium</div>
+            <div class="package-price">${fmtMoney(premiumPackage)}</div>
+          </div>
+          <div class="package-desc">${activeService.premium}</div>
         </div>
       `;
+
+      let underchargeHTML = '';
+      if (underchargePercent >= 25) {
+        underchargeHTML = `
+          <div class="warning-box">
+            You may be undercharging hard. Your bare minimum is ${fmtMoney(minimumHourly)}/hr,
+            but your recommended rate is ${fmtMoney(recommendedHourly)}/hr.
+            Charging only your minimum leaves very little room for revisions, stress, bad clients, or unexpected costs.
+          </div>
+        `;
+      } else {
+        underchargeHTML = `
+          <div class="info-box">
+            Your pricing gap looks healthier. Your minimum is ${fmtMoney(minimumHourly)}/hr,
+            and your recommended rate gives you more breathing room to work like a professional, not just survive.
+          </div>
+        `;
+      }
+      document.getElementById('underchargeBox').innerHTML = underchargeHTML;
+
+      let positionHTML = '';
+      if (recommendedHourly < 35) {
+        positionHTML = `
+          <div class="warning-box">
+            This result is still fairly low. To charge more, raise your positioning, work with better clients,
+            reduce low-value work, or make your packages feel more premium.
+          </div>
+        `;
+      } else if (recommendedHourly < 80) {
+        positionHTML = `
+          <div class="info-box">
+            This is a solid freelance range. You are no longer guessing — now the job is presenting this price with confidence and a clean offer.
+          </div>
+        `;
+      } else {
+        positionHTML = `
+          <div class="info-box">
+            You are in premium freelance territory. At this level, your brand, process, and communication should feel polished enough to justify the rate.
+          </div>
+        `;
+      }
+      document.getElementById('positionBox').innerHTML = positionHTML;
     }
 
-    renderServiceTabs();
+    renderServices();
     update();
   </script>
 </body>
