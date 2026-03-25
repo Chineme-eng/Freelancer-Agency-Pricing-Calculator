@@ -1,0 +1,2137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freelance Pricing Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Georgia&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+    :root {
+      --bg:       #faf7f2;
+      --bg2:      #f3efe8;
+      --bg3:      #ede8df;
+      --surface:  #ffffff;
+      --border:   #ddd8ce;
+      --border2:  #c8c2b6;
+      --text:     #1a1612;
+      --muted:    #7a7268;
+      --faint:    #b8b2a8;
+      --accent:   #b85c2a;
+      --accent2:  #9a4a20;
+      --accent-bg:#fdf0e8;
+      --green:    #2e7d52;
+      --green-bg: #eaf4ee;
+      --red:      #b83232;
+      --red-bg:   #fdeaea;
+      --amber:    #a06010;
+      --amber-bg: #fef6e4;
+      --blue:     #466b94;
+      --blue-bg:  #edf3fa;
+      --serif:    'EB Garamond', Georgia, serif;
+      --mono:     'IBM Plex Mono', monospace;
+      --r:        8px;
+      --r2:       12px;
+      --shadow:   0 1px 4px rgba(26,22,18,0.07);
+      --shadow2:  0 2px 12px rgba(26,22,18,0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg:       #100e0b;
+      --bg2:      #181510;
+      --bg3:      #201d18;
+      --surface:  #241f19;
+      --border:   #332d25;
+      --border2:  #4a4238;
+      --text:     #ede6da;
+      --muted:    #8a8070;
+      --faint:    #4a4238;
+      --accent:   #d4784a;
+      --accent2:  #e8905c;
+      --accent-bg:#2a1e14;
+      --green:    #3aaa6a;
+      --green-bg: #0e2018;
+      --red:      #d45050;
+      --red-bg:   #220e0e;
+      --amber:    #c88030;
+      --amber-bg: #201608;
+      --blue:     #6d96c7;
+      --blue-bg:  #12202f;
+      --shadow:   0 1px 4px rgba(0,0,0,0.3);
+      --shadow2:  0 2px 12px rgba(0,0,0,0.4);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--serif);
+      font-size: 16px;
+      line-height: 1.7;
+      min-height: 100vh;
+      transition: background .3s, color .3s;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 52px;
+      backdrop-filter: blur(8px);
+    }
+
+    .nav-brand {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .06em;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .nav-brand span { color: var(--accent); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .06em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .15s;
+    }
+
+    .nav-link:hover { color: var(--accent); }
+
+    .theme-btn, .mini-btn, .copy-btn, .mode-btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .theme-btn:hover,
+    .mini-btn:hover,
+    .copy-btn:hover,
+    .mode-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .copy-btn.copied {
+      background: var(--green-bg);
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    .mode-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 3rem 2rem 6rem;
+    }
+
+    .hero {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto 3.5rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -.01em;
+      margin-bottom: 1rem;
+    }
+
+    h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 620px;
+      margin: 0 auto 2rem;
+    }
+
+    .hero-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 1.25rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-bar-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .money-input-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+
+    .money-prefix {
+      font-family: var(--mono);
+      font-size: 18px;
+      padding: 8px 12px;
+      color: var(--muted);
+      border-right: 1px solid var(--border);
+      background: var(--bg3);
+    }
+
+    .money-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+      padding: 8px 12px;
+      width: 160px;
+      text-align: right;
+    }
+
+    .section-head {
+      margin-bottom: 1.25rem;
+      padding-bottom: .75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text);
+    }
+
+    .section-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 440px;
+      gap: 20px;
+      align-items: start;
+      margin-bottom: 3rem;
+    }
+
+    @media(max-width:960px){
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 20px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel + .panel { margin-top: 16px; }
+
+    .panel-hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .panel-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .service-grid,
+    .budget-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 8px;
+    }
+
+    .service-card,
+    .budget-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px;
+      cursor: pointer;
+      transition: all .15s;
+      position: relative;
+    }
+
+    .service-card:hover,
+    .budget-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+      transform: translateY(-1px);
+    }
+
+    .service-card.active,
+    .budget-card.active {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+      box-shadow: var(--shadow2);
+    }
+
+    .sc-icon,
+    .bc-icon {
+      font-size: 18px;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .sc-name,
+    .bc-name {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .sc-desc,
+    .bc-desc {
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      line-height: 1.4;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media(max-width:640px){
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 12px;
+      font-family: var(--serif);
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .textarea {
+      min-height: 160px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .mono { font-family: var(--mono); }
+
+    .inline-money {
+      display: flex;
+      align-items: center;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .inline-money span {
+      padding: 11px 12px;
+      font-family: var(--mono);
+      color: var(--muted);
+      background: var(--bg3);
+      border-right: 1px solid var(--border);
+    }
+
+    .inline-money input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 15px;
+      padding: 11px 12px;
+      width: 100%;
+    }
+
+    .results {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: sticky;
+      top: 72px;
+    }
+
+    @media(max-width:960px){
+      .results { position: static; }
+    }
+
+    .big-price {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .big-price::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--accent);
+    }
+
+    .bp-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .bp-val {
+      font-family: var(--serif);
+      font-size: 52px;
+      line-height: 1;
+      letter-spacing: -.02em;
+      font-weight: 400;
+      color: var(--accent);
+    }
+
+    .bp-sub {
+      font-family: var(--mono);
+      font-size: 12px;
+      margin-top: 8px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .mode-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-l {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .stat-v {
+      font-family: var(--mono);
+      font-size: 19px;
+      font-weight: 500;
+    }
+
+    .stat-s {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .warning-box,
+    .info-box,
+    .soft-box,
+    .blue-box {
+      border-radius: var(--r);
+      padding: 14px 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+      border-left: 3px solid;
+    }
+
+    .warning-box {
+      background: var(--red-bg);
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .info-box {
+      background: var(--green-bg);
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .soft-box {
+      background: var(--accent-bg);
+      border-color: var(--accent);
+      color: var(--accent2);
+    }
+
+    .blue-box {
+      background: var(--blue-bg);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .mini-k {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .mini-v {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--text);
+    }
+
+    .table-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .pricing-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .pricing-table th,
+    .pricing-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .pricing-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .pricing-table th {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .pricing-table td {
+      font-size: 14px;
+    }
+
+    .package-grid,
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .package-card,
+    .scenario-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .package-card.recommended {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+      box-shadow: var(--shadow2);
+    }
+
+   .recommended-badge {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--accent);
+  padding: 4px 7px;
+  border-radius: 999px;
+}
+
+    .package-top,
+    .scenario-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .package-name,
+    .scenario-name {
+      font-family: var(--serif);
+      font-size: 18px;
+    }
+
+    .package-price,
+    .scenario-price {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--accent);
+    }
+
+    .package-desc,
+    .scenario-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .package-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chart-wrap {
+      padding-top: 4px;
+    }
+
+    .chart-bar {
+      height: 42px;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    .chart-seg {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: width .35s ease;
+      color: #fff;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 3rem 0;
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+      margin-top: 1rem;
+    }
+
+    .tip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .tip-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .tip-title {
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 400;
+      margin-bottom: 6px;
+    }
+
+    .tip-body {
+      font-size: 13px;
+      color: var(--muted);
+      font-family: var(--serif);
+      line-height: 1.6;
+    }
+
+
+    .pro-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border: 1px solid var(--accent);
+      transition: transform .15s, box-shadow .15s, background .15s;
+      box-shadow: var(--shadow2);
+    }
+
+    .pro-cta:hover {
+      transform: translateY(-1px);
+      background: var(--accent2);
+    }
+
+    .pro-cta.ghost {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .pro-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .teaser-card {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(180deg, var(--surface), var(--bg2));
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 16px;
+      min-height: 120px;
+      box-shadow: var(--shadow);
+    }
+
+    .teaser-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(250,247,242,0.36);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      pointer-events: none;
+    }
+
+    [data-theme="dark"] .teaser-card::after {
+      background: rgba(16,14,11,0.32);
+    }
+
+    .teaser-lock {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 5px 8px;
+      box-shadow: var(--shadow2);
+    }
+
+    .teaser-top,
+    .teaser-lines,
+    .teaser-mini-grid,
+    .teaser-mini-bars {
+      position: relative;
+      z-index: 1;
+    }
+
+    .teaser-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .teaser-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .teaser-price {
+      font-family: var(--serif);
+      font-size: 24px;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .blur-line {
+      height: 10px;
+      background: var(--border);
+      border-radius: 999px;
+      margin-bottom: 8px;
+      opacity: .95;
+    }
+
+    .blur-line.sm { width: 34%; }
+    .blur-line.md { width: 58%; }
+    .blur-line.lg { width: 78%; }
+    .blur-line.full { width: 100%; }
+
+    .teaser-mini-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .teaser-mini-box {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .teaser-mini-k {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .teaser-mini-v {
+      font-family: var(--mono);
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .teaser-mini-bars {
+      margin-top: 12px;
+      display: flex;
+      gap: 6px;
+      align-items: flex-end;
+      height: 48px;
+    }
+
+    .teaser-bar {
+      flex: 1;
+      border-radius: 8px 8px 4px 4px;
+      background: linear-gradient(180deg, var(--accent), var(--accent2));
+      opacity: .95;
+    }
+
+    .pro-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .pro-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .pro-card .tip-num {
+      margin-bottom: 8px;
+    }
+
+
+    .teaser-rich {
+      box-shadow: var(--shadow2);
+      border-color: var(--border2);
+    }
+
+    .teaser-rich.large {
+      min-height: 220px;
+    }
+
+    .teaser-blur-box {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .teaser-blur-box::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.22), rgba(255,255,255,0.06));
+      pointer-events: none;
+    }
+
+    .blur-text {
+      filter: blur(3.8px);
+      user-select: none;
+    }
+
+    .teaser-mini-grid.four {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .teaser-lines.compact {
+      margin-top: 10px;
+    }
+
+    .pro-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 14px;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    @media(max-width:860px){
+      .pro-preview-grid { grid-template-columns: 1fr; }
+    }
+
+    .pro-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      background: linear-gradient(135deg, var(--accent-bg), var(--surface));
+      box-shadow: var(--shadow);
+    }
+
+    .pro-banner-copy {
+      max-width: 700px;
+    }
+
+    .pro-banner-title {
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.15;
+      margin-bottom: 6px;
+    }
+
+    .pro-banner-body {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .subtle-lock {
+      font-size: 12px;
+      margin-right: 6px;
+    }
+
+
+    .stripe-inline-wrap {
+      display:flex;
+      justify-content:center;
+      margin-top: 1rem;
+    }
+
+    .hero-pro-note {
+      text-align:center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 1rem;
+      letter-spacing: .04em;
+    }
+
+    .pro-banner-cta {
+      display:grid;
+      gap:10px;
+      justify-items:end;
+    }
+
+    @media(max-width:860px){
+      .pro-banner-cta {
+        justify-items:start;
+        width:100%;
+      }
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: .04em;
+      line-height: 2;
+    }
+
+    .small-note {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.7;
+    }
+
+    @media print {
+      nav, .theme-btn, .mini-btn, .copy-btn, .mode-row { display:none !important; }
+      body { background:#fff; color:#000; }
+      .wrap { max-width:none; padding:0; }
+      .results { position:static; }
+      .panel, .big-price, .stat, .package-card, .scenario-card, .tip-card, .mini-card {
+        box-shadow:none;
+      }
+      .divider { margin: 1.5rem 0; }
+    }
+  
+.blur-text {
+  filter: blur(6px);
+  opacity: 0.6;
+}
+
+.teaser-mini-v.blur-text,
+.teaser-price.blur-text {
+  font-size: 16px !important;
+  letter-spacing: 1px;
+}
+
+</style>
+
+  <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+</head>
+<body>
+  <nav>
+    <a class="nav-brand" href="#" onclick="return false;"><span>Kat</span>Tools</a>
+    <div class="nav-right">
+      <a class="nav-link" href="#calculator">Calculator</a>
+      <a class="nav-link" href="#packages">Packages</a>
+      <a class="nav-link" href="#pro">Pro</a>
+      <button class="theme-btn" onclick="window.print()">Save / Print</button>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">Dark mode</button>
+    </div>
+  </nav>
+
+  <div class="wrap">
+    <header class="hero">
+      <div class="hero-eyebrow">Freelancers only</div>
+      <h1>The Freelance<br><em>Pricing</em> Calculator</h1>
+      <p class="hero-sub">
+        Stop guessing what to charge. Pick your freelance service, choose your client type, and get a clean base rate for hourly, project, and package pricing.
+      </p>
+      <div class="hero-bar">
+        <span class="hero-bar-label">Monthly income goal</span>
+        <div class="money-input-wrap">
+          <span class="money-prefix">$</span>
+          <input id="incomeGoalTop" class="money-input" type="text" value="6,000" oninput="syncIncomeGoal(this)" onblur="formatMoneyInput(this)">
+        </div>
+      </div>
+      <div class="hero-pro-note">One-time access · No subscription · Unlock the full Pro quote engine</div>
+
+    </header>
+
+    <section id="calculator">
+      <div class="section-head">
+        <span class="section-title">Choose your freelance setup</span>
+        <span class="section-sub">service + client type + base pricing</span>
+      </div>
+
+      <div class="main-grid">
+        <div>
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">Freelance services</span>
+            </div>
+            <div class="service-grid" id="serviceGrid"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">Client budget presets</span>
+            </div>
+            <div class="budget-grid" id="budgetGrid"></div>
+            <div class="small-note">
+              Clicking one of these presets auto-adjusts your client budget level, revision buffer, and target project count.
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">Your setup</span>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="incomeGoal">Monthly income goal</label>
+                <div class="inline-money">
+                  <span>$</span>
+                  <input id="incomeGoal" type="text" value="6,000" oninput="syncIncomeGoal(this)" onblur="formatMoneyInput(this)">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="monthlyExpenses">Monthly business expenses</label>
+                <div class="inline-money">
+                  <span>$</span>
+                  <input id="monthlyExpenses" type="text" value="300" oninput="update()" onblur="formatMoneyInput(this)">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="billableHours">Billable hours per week</label>
+                <input id="billableHours" class="input mono" type="number" min="1" value="20" oninput="update()">
+              </div>
+
+              <div class="field">
+                <label for="weeksPerMonth">Working weeks per month</label>
+                <input id="weeksPerMonth" class="input mono" type="number" min="1" max="5" value="4" oninput="update()">
+              </div>
+
+              <div class="field">
+                <label for="experience">Experience level</label>
+                <select id="experience" class="select" onchange="update()">
+                  <option value="0.9">Beginner</option>
+                  <option value="1" selected>Intermediate</option>
+                  <option value="1.2">Advanced</option>
+                  <option value="1.4">Expert</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="clientType">Client budget level</label>
+                <select id="clientType" class="select" onchange="syncBudgetFromSelect(); update()">
+                  <option value="0.9">Low budget clients</option>
+                  <option value="1" selected>Standard clients</option>
+                  <option value="1.2">Premium clients</option>
+                  <option value="1.4">High-end / luxury clients</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="taxBuffer">Tax + safety buffer %</label>
+                <input id="taxBuffer" class="input mono" type="number" min="0" max="80" value="25" oninput="update()">
+              </div>
+
+              <div class="field">
+                <label for="hoursPerProject">Hours per project</label>
+                <input id="hoursPerProject" class="input mono" type="number" min="1" value="10" oninput="update()">
+              </div>
+
+              <div class="field">
+                <label for="monthlyClients">Target projects per month</label>
+                <input id="monthlyClients" class="input mono" type="number" min="1" value="4" oninput="update()">
+              </div>
+
+              <div class="field">
+                <label for="revisionRisk">Revision / hassle buffer %</label>
+                <input id="revisionRisk" class="input mono" type="number" min="0" max="100" value="10" oninput="update()">
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">Pricing breakdown</span>
+              <button class="mini-btn" onclick="resetDefaults()">Reset</button>
+            </div>
+            <div class="table-card" style="box-shadow:none;border:none;background:transparent;">
+              <table class="pricing-table">
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody id="breakdownRows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="results">
+          <div class="big-price">
+            <div class="panel-label" style="margin-bottom:10px;">Result mode</div>
+            <div class="mode-row" id="modeRow"></div>
+
+            <div class="bp-label" id="resultLabel">Recommended project price</div>
+            <div class="bp-val" id="headlinePrice">$0</div>
+            <div class="bp-sub" id="headlineSub"></div>
+          </div>
+
+          <div class="stat-grid" id="statGrid"></div>
+
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">Free tier note</span>
+            </div>
+            <div class="soft-box" id="freeTierNoteBox"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">How many clients do you need?</span>
+            </div>
+            <div class="mini-grid" id="clientsNeededGrid"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">Monthly capacity</span>
+            </div>
+            <div class="mini-grid" id="capacityGrid"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-hdr">
+              <span class="panel-label">Locked Pro previews</span>
+            </div>
+            <div class="small-note" style="margin-top:-4px; margin-bottom:12px;">
+              Want the protected number, proposal framing, and retainer logic? Unlock Pro below.
+            </div>
+            <div class="pro-stack" id="sidebarProTeasers">
+              <div class="teaser-card teaser-rich">
+                <div class="teaser-lock">🔒 Unlock Pro</div>
+                <div class="teaser-top">
+                  <div class="teaser-label">Underpricing detector</div>
+                  <div class="teaser-price" id="teaserProtectedPrice">$1,450</div>
+                </div>
+                <div class="teaser-mini-grid">
+                  <div class="teaser-mini-box">
+                    <div class="teaser-mini-k">Base</div>
+                    <div class="teaser-mini-v" id="teaserBasePrice">$1,050</div>
+                  </div>
+                  <div class="teaser-mini-box teaser-blur-box">
+                    <div class="teaser-mini-k">Protected</div>
+                    <div class="teaser-mini-v blur-text" id="teaserBlurProtected">$1,450</div>
+                  </div>
+                </div>
+                <div class="teaser-lines compact">
+                  <div class="blur-line full"></div>
+                  <div class="blur-line md"></div>
+                </div>
+              </div>
+
+              <div class="teaser-card teaser-rich">
+                <div class="teaser-lock">🔒 Unlock Pro</div>
+                <div class="teaser-top">
+                  <div class="teaser-label">Client risk + scope</div>
+                  <div class="teaser-price" id="teaserRiskDelta">+18%</div>
+                </div>
+                <div class="teaser-mini-grid four" id="teaserRiskGrid">
+                  <div class="teaser-mini-box">
+                    <div class="teaser-mini-k">Easy</div>
+                    <div class="teaser-mini-v">$780</div>
+                  </div>
+                  <div class="teaser-mini-box teaser-blur-box">
+                    <div class="teaser-mini-k">Difficult</div>
+                    <div class="teaser-mini-v blur-text">$1,120</div>
+                  </div>
+                  <div class="teaser-mini-box">
+                    <div class="teaser-mini-k">Tight</div>
+                    <div class="teaser-mini-v">0%</div>
+                  </div>
+                  <div class="teaser-mini-box teaser-blur-box">
+                    <div class="teaser-mini-k">Messy</div>
+                    <div class="teaser-mini-v blur-text">+16%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="teaser-card teaser-rich">
+                <div class="teaser-lock">🔒 Unlock Pro</div>
+                <div class="teaser-top">
+                  <div class="teaser-label">Retainer + proposal</div>
+                  <div class="teaser-price" id="teaserRetainer">$900/mo</div>
+                </div>
+                <div class="teaser-mini-bars" id="teaserBars">
+                  <div class="teaser-bar" style="height:35%"></div>
+                  <div class="teaser-bar" style="height:58%"></div>
+                  <div class="teaser-bar" style="height:82%"></div>
+                  <div class="teaser-bar" style="height:70%"></div>
+                </div>
+                <div class="teaser-lines" style="margin-top:12px;">
+                  <div class="blur-line full"></div>
+                  <div class="blur-line sm"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="packages">
+      <div class="section-head">
+        <span class="section-title">Suggested package pricing</span>
+        <span class="section-sub">easy to turn into a proposal</span>
+      </div>
+
+      <div class="package-grid" id="packageGrid"></div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="pro">
+      <div class="section-head">
+        <span class="section-title">What Pro adds</span>
+        <span class="section-sub">deeper pricing confidence</span>
+      </div>
+
+      <div class="pro-preview-grid" id="mainProPreviewGrid">
+        <div class="teaser-card teaser-rich large">
+          <div class="teaser-lock">🔒 Pro preview</div>
+          <div class="teaser-top">
+            <div class="teaser-label">Smarter quote</div>
+            <div class="teaser-price" id="mainTeaserQuote">$2,400</div>
+          </div>
+          <div class="teaser-lines">
+            <div class="blur-line lg"></div>
+            <div class="blur-line full"></div>
+            <div class="blur-line md"></div>
+          </div>
+          <div class="teaser-mini-grid">
+            <div class="teaser-mini-box">
+              <div class="teaser-mini-k">Base</div>
+              <div class="teaser-mini-v" id="mainTeaserBase">$1,850</div>
+            </div>
+            <div class="teaser-mini-box teaser-blur-box">
+              <div class="teaser-mini-k">Protected</div>
+              <div class="teaser-mini-v blur-text" id="mainTeaserProtected">$2,400</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="teaser-card teaser-rich large">
+          <div class="teaser-lock">🔒 Pro preview</div>
+          <div class="teaser-top">
+            <div class="teaser-label">Risk + scope view</div>
+            <div class="teaser-price" id="mainTeaserLocked">Locked</div>
+          </div>
+          <div class="teaser-mini-grid four" id="mainTeaserRiskGrid">
+            <div class="teaser-mini-box">
+              <div class="teaser-mini-k">Normal</div>
+              <div class="teaser-mini-v">$980</div>
+            </div>
+            <div class="teaser-mini-box teaser-blur-box">
+              <div class="teaser-mini-k">Messy</div>
+              <div class="teaser-mini-v blur-text">$1,340</div>
+            </div>
+            <div class="teaser-mini-box">
+              <div class="teaser-mini-k">Safe</div>
+              <div class="teaser-mini-v">92%</div>
+            </div>
+            <div class="teaser-mini-box teaser-blur-box">
+              <div class="teaser-mini-k">Premium</div>
+              <div class="teaser-mini-v blur-text">112%</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="teaser-card teaser-rich large">
+          <div class="teaser-lock">🔒 Pro preview</div>
+          <div class="teaser-top">
+            <div class="teaser-label">Retainer + proposal</div>
+            <div class="teaser-price" id="mainTeaserRetainer">$1,200</div>
+          </div>
+          <div class="teaser-mini-bars" id="mainTeaserBars">
+            <div class="teaser-bar" style="height:24%"></div>
+            <div class="teaser-bar" style="height:42%"></div>
+            <div class="teaser-bar" style="height:68%"></div>
+            <div class="teaser-bar" style="height:86%"></div>
+          </div>
+          <div class="teaser-lines" style="margin-top:12px;">
+            <div class="blur-line full"></div>
+            <div class="blur-line sm"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pro-feature-grid">
+        <div class="pro-card">
+          <div class="tip-num">Pro 01</div>
+          <div class="tip-title">Underpricing detector</div>
+          <div class="tip-body">See whether your quote is sitting too close to your survival floor before you send it to a client.</div>
+        </div>
+        <div class="pro-card">
+          <div class="tip-num">Pro 02</div>
+          <div class="tip-title">Client risk adjustment</div>
+          <div class="tip-body">Model easy, normal, difficult, and nightmare clients so your quote reflects real-world friction and hidden labor.</div>
+        </div>
+        <div class="pro-card">
+          <div class="tip-num">Pro 03</div>
+          <div class="tip-title">Scope creep protection</div>
+          <div class="tip-body">Build in realistic protection for messy projects, vague deliverables, and over-revision habits before they eat your margin.</div>
+        </div>
+        <div class="pro-card">
+          <div class="tip-num">Pro 04</div>
+          <div class="tip-title">Retainer and proposal tools</div>
+          <div class="tip-body">Get stronger retainer numbers, package framing, proposal-ready wording, and cleaner client-facing quote options.</div>
+        </div>
+      </div>
+
+      <div class="pro-banner">
+        <div class="pro-banner-copy">
+          <div class="pro-banner-title">Unlock the full quote engine</div>
+          <div class="pro-banner-body">
+            The free version gives you a strong starting point. Pro upgrades that into the safer number you actually send with client difficulty, scope protection, proposal framing, retainer pricing, and more realistic decision-level quote logic.
+          </div>
+        </div>
+        <div class="pro-banner-cta">
+          <div class="hero-pro-note" style="margin-top:0;">One-time purchase · Instant access</div>
+          <stripe-buy-button
+            buy-button-id="buy_btn_1TEjy05C7NUdptXthquomB2r"
+            publishable-key="pk_live_51TCvyI5C7NUdptXt5hLz5Y0IiPkfJ9uqZeW1RgclG7VBtztdtLCiESwoDZSN9lUxZSwVy0zoH1kTSVWJXcSW8U5A00SWlrFP9N"
+          >
+          </stripe-buy-button>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section id="tips">
+      <div class="section-head">
+        <span class="section-title">Freelance pricing reminders</span>
+      </div>
+
+      <div class="tips-grid">
+        <div class="tip-card">
+          <div class="tip-num">01</div>
+          <div class="tip-title">Do not charge from fear</div>
+          <div class="tip-body">Clients do not know your internal panic. Your pricing should come from your math, not your emotions.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">02</div>
+          <div class="tip-title">Hourly is your floor</div>
+          <div class="tip-body">Use your hourly number to protect yourself, but sell projects and packages whenever possible.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">03</div>
+          <div class="tip-title">Packages feel more premium</div>
+          <div class="tip-body">A clear starter, standard, and premium offer makes you look more established and easier to buy from.</div>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">04</div>
+          <div class="tip-title">Cheap clients are expensive</div>
+          <div class="tip-body">Low-paying clients usually ask for more revisions, more energy, and more emotional labor.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div>Freelance Pricing Calculator · Built to help freelancers stop undercharging.</div>
+      <div style="margin-top:.5rem">Use this as your base pricing starting point.</div>
+    </footer>
+  </div>
+
+  <script>
+    function toggleTheme(){
+      const html = document.documentElement;
+      const dark = html.dataset.theme !== 'dark';
+      html.dataset.theme = dark ? 'dark' : 'light';
+      document.getElementById('themeBtn').textContent = dark ? 'Light mode' : 'Dark mode';
+      localStorage.setItem('kc-theme', html.dataset.theme);
+    }
+
+    (function(){
+      const saved = localStorage.getItem('kc-theme');
+      if(saved){
+        document.documentElement.dataset.theme = saved;
+        document.addEventListener('DOMContentLoaded', () => {
+          const btn = document.getElementById('themeBtn');
+          if(btn) btn.textContent = saved === 'dark' ? 'Light mode' : 'Dark mode';
+        });
+      }
+    })();
+
+    const SERVICES = [
+      {
+        id: 'graphic-design',
+        icon: '🎨',
+        name: 'Graphic Design',
+        desc: 'Flyers, branding, social posts',
+        multiplier: 1.00,
+        starter: 'Simple deliverable, fast turnaround',
+        standard: 'Better polish and strategy',
+        premium: 'Premium branding or full design scope'
+      },
+      {
+        id: 'web-design',
+        icon: '🖥️',
+        name: 'Web Design',
+        desc: 'Landing pages, UI, websites',
+        multiplier: 1.20,
+        starter: 'Small page or basic concept',
+        standard: 'Full polished client-ready design',
+        premium: 'High-end custom design system'
+      },
+      {
+        id: 'web-development',
+        icon: '💻',
+        name: 'Web Development',
+        desc: 'Sites, features, front-end builds',
+        multiplier: 1.30,
+        starter: 'Simple build or edit',
+        standard: 'Full client-facing implementation',
+        premium: 'Advanced custom coded work'
+      },
+      {
+        id: 'video-editing',
+        icon: '🎬',
+        name: 'Video Editing',
+        desc: 'Short-form, YouTube, ads',
+        multiplier: 1.10,
+        starter: 'Simple edited deliverable',
+        standard: 'Stronger pacing, polish, captions',
+        premium: 'High-conversion or branded edit package'
+      },
+      {
+        id: 'copywriting',
+        icon: '✍️',
+        name: 'Copywriting',
+        desc: 'Captions, emails, sales copy',
+        multiplier: 1.05,
+        starter: 'Basic copy asset',
+        standard: 'Sharper conversion-focused writing',
+        premium: 'Strategic copy package with revisions'
+      },
+      {
+        id: 'social-media',
+        icon: '📱',
+        name: 'Social Media',
+        desc: 'Content planning and posting',
+        multiplier: 1.00,
+        starter: 'Light monthly support',
+        standard: 'Consistent content management',
+        premium: 'Growth-focused premium support'
+      },
+      {
+        id: 'ugc-script',
+        icon: '🧠',
+        name: 'UGC / Script Writing',
+        desc: 'Hooks, scripts, creator copy',
+        multiplier: 1.00,
+        starter: 'Short script package',
+        standard: 'Better volume + better structure',
+        premium: 'Conversion-led premium scripting'
+      },
+      {
+        id: 'consulting',
+        icon: '🎯',
+        name: 'Consulting',
+        desc: 'Advice, calls, strategy',
+        multiplier: 1.35,
+        starter: 'Quick focused help',
+        standard: 'Structured expert guidance',
+        premium: 'High-level strategic support'
+      }
+    ];
+
+    const BUDGET_PRESETS = [
+      {
+        id: 'small-creator',
+        icon: '🌱',
+        name: 'Small Creator',
+        desc: 'Budget-sensitive, lighter scope',
+        clientType: '0.9',
+        revisionRisk: 6,
+        monthlyClients: 6
+      },
+      {
+        id: 'local-business',
+        icon: '🏪',
+        name: 'Local Business',
+        desc: 'Practical clients, standard scope',
+        clientType: '1',
+        revisionRisk: 10,
+        monthlyClients: 4
+      },
+      {
+        id: 'growing-brand',
+        icon: '📈',
+        name: 'Growing Brand',
+        desc: 'More value-driven, stronger budgets',
+        clientType: '1.2',
+        revisionRisk: 14,
+        monthlyClients: 3
+      },
+      {
+        id: 'premium-brand',
+        icon: '✨',
+        name: 'Premium Brand',
+        desc: 'High expectations, premium pricing',
+        clientType: '1.4',
+        revisionRisk: 18,
+        monthlyClients: 2
+      }
+    ];
+
+    const RESULT_MODES = [
+      { id: 'project', label: 'Project' },
+      { id: 'hourly', label: 'Hourly' },
+      { id: 'packages', label: 'Packages' }
+    ];
+
+    let activeService = SERVICES[0];
+    let activeBudgetPreset = BUDGET_PRESETS[1];
+    let activeMode = 'project';
+
+    function renderServices(){
+      const grid = document.getElementById('serviceGrid');
+      grid.innerHTML = SERVICES.map(s => `
+        <div class="service-card${s.id === activeService.id ? ' active' : ''}" onclick="pickService('${s.id}')">
+          <span class="sc-icon">${s.icon}</span>
+          <div class="sc-name">${s.name}</div>
+          <div class="sc-desc">${s.desc}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderBudgetPresets(){
+      const grid = document.getElementById('budgetGrid');
+      grid.innerHTML = BUDGET_PRESETS.map(b => `
+        <div class="budget-card${b.id === activeBudgetPreset.id ? ' active' : ''}" onclick="pickBudgetPreset('${b.id}')">
+          <span class="bc-icon">${b.icon}</span>
+          <div class="bc-name">${b.name}</div>
+          <div class="bc-desc">${b.desc}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderModes(){
+      const row = document.getElementById('modeRow');
+      row.innerHTML = RESULT_MODES.map(m => `
+        <button class="mode-btn${m.id === activeMode ? ' active' : ''}" onclick="setMode('${m.id}')">${m.label}</button>
+      `).join('');
+    }
+
+    function setMode(id){
+      activeMode = id;
+      renderModes();
+      update();
+    }
+
+    function pickService(id){
+      activeService = SERVICES.find(s => s.id === id) || SERVICES[0];
+      renderServices();
+      update();
+    }
+
+    function pickBudgetPreset(id){
+      activeBudgetPreset = BUDGET_PRESETS.find(b => b.id === id) || BUDGET_PRESETS[1];
+      document.getElementById('clientType').value = activeBudgetPreset.clientType;
+      document.getElementById('revisionRisk').value = activeBudgetPreset.revisionRisk;
+      document.getElementById('monthlyClients').value = activeBudgetPreset.monthlyClients;
+      renderBudgetPresets();
+      update();
+    }
+
+    function syncBudgetFromSelect(){
+      const clientType = document.getElementById('clientType').value;
+      const matched = BUDGET_PRESETS.find(b => b.clientType === clientType);
+      if(matched){
+        activeBudgetPreset = matched;
+        renderBudgetPresets();
+      }
+    }
+
+    function parseMoney(str){
+      return parseInt(String(str).replace(/[^0-9]/g,'')) || 0;
+    }
+
+    function formatMoneyInput(el){
+      const n = parseMoney(el.value);
+      el.value = n.toLocaleString();
+    }
+
+    function fmtMoney(n){
+      return '$' + Math.round(n).toLocaleString();
+    }
+
+    function fmtPct(n){
+      return (Math.round(n * 10) / 10) + '%';
+    }
+
+    function safeCeil(n){
+      return Number.isFinite(n) ? Math.ceil(n) : Infinity;
+    }
+
+    function syncIncomeGoal(el){
+      const n = parseMoney(el.value);
+      document.getElementById('incomeGoal').value = n.toLocaleString();
+      document.getElementById('incomeGoalTop').value = n.toLocaleString();
+      update();
+    }
+
+    function resetDefaults(){
+      document.getElementById('incomeGoal').value = '6,000';
+      document.getElementById('incomeGoalTop').value = '6,000';
+      document.getElementById('monthlyExpenses').value = '300';
+      document.getElementById('billableHours').value = '20';
+      document.getElementById('weeksPerMonth').value = '4';
+      document.getElementById('experience').value = '1';
+      document.getElementById('clientType').value = '1';
+      document.getElementById('taxBuffer').value = '25';
+      document.getElementById('hoursPerProject').value = '10';
+      document.getElementById('monthlyClients').value = '4';
+      document.getElementById('revisionRisk').value = '10';
+      activeService = SERVICES[0];
+      activeBudgetPreset = BUDGET_PRESETS[1];
+      activeMode = 'project';
+      renderServices();
+      renderBudgetPresets();
+      renderModes();
+      update();
+    }
+
+    function copyText(text){
+      navigator.clipboard.writeText(text);
+    }
+
+    function flashCopyButton(button){
+      const original = button.textContent;
+      button.textContent = 'Copied';
+      button.classList.add('copied');
+      setTimeout(() => {
+        button.textContent = original;
+        button.classList.remove('copied');
+      }, 1200);
+    }
+
+    function createPackageCard(name, price, desc, recommended){
+      return `
+        <div class="package-card${recommended ? ' recommended' : ''}">
+          ${recommended ? '<div class="recommended-badge">Best fit</div>' : ''}
+          <div class="package-top">
+            <div class="package-name">${name}</div>
+            <div class="package-price">${fmtMoney(price)}</div>
+          </div>
+          <div class="package-desc">${desc}</div>
+          <div class="package-actions">
+            <button class="copy-btn" onclick="copyPackagePrice('${name}', ${Math.round(price)}, this)">Copy price</button>
+            <button class="copy-btn" onclick="copyPackageLine('${name}', ${Math.round(price)}, this)">Copy line</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function copyPackagePrice(name, price, btn){
+      copyText(`${fmtMoney(price)}`);
+      flashCopyButton(btn);
+    }
+
+    function copyPackageLine(name, price, btn){
+      copyText(`${name} — ${fmtMoney(price)}`);
+      if(btn) flashCopyButton(btn);
+    }
+
+    function update(){
+      const incomeGoal = parseMoney(document.getElementById('incomeGoal').value);
+      const monthlyExpenses = parseMoney(document.getElementById('monthlyExpenses').value);
+      const billableHours = +document.getElementById('billableHours').value || 1;
+      const weeksPerMonth = +document.getElementById('weeksPerMonth').value || 4;
+      const experience = +document.getElementById('experience').value || 1;
+      const clientType = +document.getElementById('clientType').value || 1;
+      const taxBuffer = (+document.getElementById('taxBuffer').value || 0) / 100;
+      const hoursPerProject = +document.getElementById('hoursPerProject').value || 1;
+      const monthlyClients = +document.getElementById('monthlyClients').value || 1;
+      const revisionRisk = (+document.getElementById('revisionRisk').value || 0) / 100;
+
+      const monthlyHours = billableHours * weeksPerMonth;
+      const baseNeed = incomeGoal + monthlyExpenses;
+      const protectedRevenue = baseNeed / Math.max(0.1, 1 - taxBuffer);
+      const positionedRevenue = protectedRevenue * experience * clientType * activeService.multiplier;
+      const revisionProtectedRevenue = positionedRevenue * (1 + revisionRisk);
+
+      const minimumHourly = baseNeed / Math.max(1, monthlyHours);
+      const sustainableHourly = protectedRevenue / Math.max(1, monthlyHours);
+      const recommendedHourly = revisionProtectedRevenue / Math.max(1, monthlyHours);
+
+      const recommendedProject = recommendedHourly * hoursPerProject;
+      const premiumProject = recommendedProject * 1.3;
+
+      const starterPackage = recommendedProject * 0.85;
+      const standardPackage = recommendedProject * 1.00;
+      const premiumPackage = premiumProject * 1.35;
+
+      const maxProjectsByTime = Math.max(1, Math.floor(monthlyHours / Math.max(1, hoursPerProject)));
+      const monthlyRevenueAtRecommended = recommendedProject * monthlyClients;
+      const monthlyRevenueAtCapacity = recommendedProject * maxProjectsByTime;
+      const retainerEquivalent = recommendedProject * 0.9;
+      const dayRate = recommendedHourly * 6;
+
+      const underchargePercent = recommendedHourly > 0
+        ? ((recommendedHourly - minimumHourly) / recommendedHourly) * 100
+        : 0;
+
+      const confidenceScoreRaw =
+        (experience * 25) +
+        (clientType * 20) +
+        (activeService.multiplier * 20) +
+        ((revisionRisk * 100) * 0.6) +
+        ((taxBuffer * 100) * 0.4);
+
+      const confidenceScore = Math.min(100, Math.max(10, Math.round(confidenceScoreRaw)));
+
+      const clientsAtStarter = safeCeil(incomeGoal / Math.max(1, starterPackage));
+      const clientsAtStandard = safeCeil(incomeGoal / Math.max(1, standardPackage));
+      const clientsAtPremium = safeCeil(incomeGoal / Math.max(1, premiumPackage));
+
+      let resultLabel = 'Recommended project price';
+      let resultValue = fmtMoney(recommendedProject);
+      let resultSub = `${activeService.name} · ${activeBudgetPreset.name} · ${fmtMoney(recommendedHourly)}/hr`;
+
+      if(activeMode === 'hourly'){
+        resultLabel = 'Recommended hourly rate';
+        resultValue = fmtMoney(recommendedHourly);
+        resultSub = `${activeService.name} · sustainable floor ${fmtMoney(sustainableHourly)} · day rate ${fmtMoney(dayRate)}`;
+      } else if(activeMode === 'packages'){
+        resultLabel = 'Recommended package tier';
+        resultValue = fmtMoney(standardPackage);
+        resultSub = `Starter ${fmtMoney(starterPackage)} · Standard ${fmtMoney(standardPackage)} · Premium ${fmtMoney(premiumPackage)}`;
+      }
+
+      document.getElementById('resultLabel').textContent = resultLabel;
+      document.getElementById('headlinePrice').textContent = resultValue;
+      document.getElementById('headlineSub').textContent = resultSub;
+
+      document.getElementById('statGrid').innerHTML = [
+        {
+          l:'Minimum hourly',
+          v:fmtMoney(minimumHourly),
+          s:'absolute floor',
+          c:'var(--amber)'
+        },
+        {
+          l:'Base hourly',
+          v:fmtMoney(recommendedHourly),
+          s:'starting quote point',
+          c:'var(--accent)'
+        },
+        {
+          l:'Base project',
+          v:fmtMoney(recommendedProject),
+          s:'before client complexity',
+          c:'var(--text)'
+        },
+        {
+          l:'Protected monthly target',
+          v:fmtMoney(revisionProtectedRevenue),
+          s:'goal + costs + buffers',
+          c:'var(--green)'
+        }
+      ].map(s => `
+        <div class="stat">
+          <div class="stat-l">${s.l}</div>
+          <div class="stat-v" style="color:${s.c}">${s.v}</div>
+          <div class="stat-s">${s.s}</div>
+        </div>
+      `).join('');
+
+      document.getElementById('breakdownRows').innerHTML = [
+        ['Freelance service', activeService.name],
+        ['Budget preset', activeBudgetPreset.name],
+        ['Monthly income goal', fmtMoney(incomeGoal)],
+        ['Monthly business expenses', fmtMoney(monthlyExpenses)],
+        ['Base monthly need', fmtMoney(baseNeed)],
+        ['Tax + safety buffer', fmtPct(taxBuffer * 100)],
+        ['Revision / hassle buffer', fmtPct(revisionRisk * 100)],
+        ['Working hours per month', monthlyHours + ' hrs'],
+        ['Minimum hourly floor', fmtMoney(minimumHourly)],
+        ['Base hourly', fmtMoney(recommendedHourly)],
+        ['Project hours used', hoursPerProject + ' hrs'],
+        ['Base project price', fmtMoney(recommendedProject)]
+      ].map(row => `
+        <tr>
+          <td>${row[0]}</td>
+          <td class="mono">${row[1]}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('packageGrid').innerHTML = [
+        createPackageCard('Starter', starterPackage, activeService.starter, false),
+        createPackageCard('Standard', standardPackage, activeService.standard, true),
+        createPackageCard('Premium', premiumPackage, activeService.premium, false)
+      ].join('');
+
+      document.getElementById('clientsNeededGrid').innerHTML = `
+        <div class="mini-card">
+          <div class="mini-k">Starter path</div>
+          <div class="mini-v">${clientsAtStarter}</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-k">Standard path</div>
+          <div class="mini-v">${clientsAtStandard}</div>
+        </div>
+        <div class="mini-card" style="position:relative;overflow:hidden;">
+          <div class="mini-k"><span class="subtle-lock">🔒</span>Pro smarter target</div>
+          <div class="mini-v" style="filter: blur(3px); user-select:none;">${Math.max(1, Math.ceil(clientsAtStandard * 0.8))}</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-k">Current target</div>
+          <div class="mini-v">${monthlyClients}</div>
+        </div>
+      `;
+
+      document.getElementById('capacityGrid').innerHTML = `
+        <div class="mini-card">
+          <div class="mini-k">Projects / month</div>
+          <div class="mini-v">${maxProjectsByTime}</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-k">Target projects</div>
+          <div class="mini-v">${monthlyClients}</div>
+        </div>
+        <div class="mini-card">
+          <div class="mini-k">Suggested day rate</div>
+          <div class="mini-v">${fmtMoney(dayRate)}</div>
+        </div>
+        <div class="mini-card" style="position:relative;overflow:hidden;">
+          <div class="mini-k"><span class="subtle-lock">🔒</span>Pro capacity insight</div>
+          <div class="mini-v" style="filter: blur(3px); user-select:none;">${fmtMoney(monthlyRevenueAtCapacity * 1.12)}</div>
+        </div>
+      `;
+
+      document.getElementById('freeTierNoteBox').innerHTML = `
+        This free version gives you a <strong>clean base rate</strong> — not the full decision layer. Your final quote still depends on client difficulty, scope creep, revision pressure, positioning, and how polished you want the offer to feel. <br><br><span class="subtle-lock">🔒</span>Pro unlocks the safer number freelancers actually send.`;
+
+      const protectedProject = Math.round(recommendedProject * (1.12 + (revisionRisk * 0.35)));
+      const easyProject = Math.round(recommendedProject * 0.96);
+      const difficultProject = Math.round(recommendedProject * 1.16);
+      const messyScopeProject = Math.round(recommendedProject * 1.18);
+      const protectedRetainer = Math.round((recommendedHourly * Math.max(6, Math.round(hoursPerProject * 0.7))) * 0.96);
+
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = value;
+      };
+      const setHTML = (id, value) => {
+        const el = document.getElementById(id);
+        if(el) el.innerHTML = value;
+      };
+
+      setText('teaserProtectedPrice', fmtMoney(protectedProject));
+      setText('teaserBasePrice', fmtMoney(recommendedProject));
+      setText('teaserBlurProtected', fmtMoney(protectedProject));
+      setText('teaserRiskDelta', '+' + Math.round(((difficultProject / Math.max(1, easyProject)) - 1) * 100) + '%');
+      setHTML('teaserRiskGrid', `
+        <div class="teaser-mini-box">
+          <div class="teaser-mini-k">Easy</div>
+          <div class="teaser-mini-v">${fmtMoney(easyProject)}</div>
+        </div>
+        <div class="teaser-mini-box teaser-blur-box">
+          <div class="teaser-mini-k">Difficult</div>
+          <div class="teaser-mini-v blur-text">${fmtMoney(difficultProject)}</div>
+        </div>
+        <div class="teaser-mini-box">
+          <div class="teaser-mini-k">Tight</div>
+          <div class="teaser-mini-v">+0%</div>
+        </div>
+        <div class="teaser-mini-box teaser-blur-box">
+          <div class="teaser-mini-k">Messy</div>
+          <div class="teaser-mini-v blur-text">+${Math.max(12, Math.round(revisionRisk*100 + 8))}%</div>
+        </div>
+      `);
+      setText('teaserRetainer', fmtMoney(protectedRetainer) + '/mo');
+      setHTML('teaserBars', `
+        <div class="teaser-bar" style="height:${Math.max(26, Math.min(90, Math.round((starterPackage / premiumPackage) * 78)))}%"></div>
+        <div class="teaser-bar" style="height:${Math.max(40, Math.min(92, Math.round((standardPackage / premiumPackage) * 88)))}%"></div>
+        <div class="teaser-bar" style="height:${Math.max(62, Math.min(96, Math.round((premiumPackage / premiumPackage) * 92)))}%"></div>
+        <div class="teaser-bar" style="height:${Math.max(48, Math.min(94, Math.round((protectedRetainer / Math.max(1, premiumPackage)) * 88)))}%"></div>
+      `);
+
+      setText('mainTeaserQuote', fmtMoney(protectedProject));
+      setText('mainTeaserBase', fmtMoney(recommendedProject));
+      setText('mainTeaserProtected', fmtMoney(protectedProject));
+      setText('mainTeaserRetainer', fmtMoney(protectedRetainer));
+      setHTML('mainTeaserRiskGrid', `
+        <div class="teaser-mini-box">
+          <div class="teaser-mini-k">Normal</div>
+          <div class="teaser-mini-v">${fmtMoney(recommendedProject)}</div>
+        </div>
+        <div class="teaser-mini-box teaser-blur-box">
+          <div class="teaser-mini-k">Messy</div>
+          <div class="teaser-mini-v blur-text">${fmtMoney(messyScopeProject)}</div>
+        </div>
+        <div class="teaser-mini-box">
+          <div class="teaser-mini-k">Safe</div>
+          <div class="teaser-mini-v">96%</div>
+        </div>
+        <div class="teaser-mini-box teaser-blur-box">
+          <div class="teaser-mini-k">Premium</div>
+          <div class="teaser-mini-v blur-text">112%</div>
+        </div>
+      `);
+      setHTML('mainTeaserBars', `
+        <div class="teaser-bar" style="height:${Math.max(24, Math.min(90, Math.round((starterPackage / premiumPackage) * 72)))}%"></div>
+        <div class="teaser-bar" style="height:${Math.max(38, Math.min(92, Math.round((standardPackage / premiumPackage) * 84)))}%"></div>
+        <div class="teaser-bar" style="height:88%"></div>
+        <div class="teaser-bar" style="height:${Math.max(52, Math.min(94, Math.round((protectedRetainer / Math.max(1, premiumPackage)) * 86)))}%"></div>
+      `);
+
+    }
+
+    renderServices();
+    renderBudgetPresets();
+    renderModes();
+    update();
+  </script>
+</body>
+</html>
